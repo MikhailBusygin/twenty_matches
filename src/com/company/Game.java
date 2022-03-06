@@ -1,13 +1,38 @@
 package com.company;
 
 public class Game {
-    private int valueGame = 20;
+    private final Computer computer;
+    private final GameConsole console;
+    private int gameValue = 20;
+    private boolean computerStep;
 
-    public int getGameValue() {
-        return valueGame;
+    public Game(Computer computer, GameConsole console) {
+        this.computer = computer;
+        this.console = console;
     }
 
-    public void setValue(int value) {
-        valueGame = valueGame - value;
+    public void playGame() {
+        console.startGame();
+        while (true) {
+            console.printGameValue(gameValue);
+            if (gameValue > 1) {
+                console.stepMessage(true);
+                computer.setValue(gameValue);
+                gameValue -= computer.getValue();
+                console.printComputerValue(computer.getValue());
+            } else {
+                computerStep = true;
+                break;
+            }
+            console.printGameValue(gameValue);
+            if (gameValue > 1) {
+                console.stepMessage(false);
+                console.setPlayerValue();
+                gameValue -= console.getPlayerValue();
+            } else {
+                break;
+            }
+        }
+        console.endGame(computerStep);
     }
 }
